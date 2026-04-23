@@ -14,3 +14,12 @@ exports.getAllJobs = async(req, res, next) => {
         next(error)
     }
 };
+
+exports.postJobs = async(req, res, next) => {
+    try {
+        const job = await Jobs.create(req.body);
+        res.status(201).json(job)
+    } catch (error) {
+        next(error)
+    }
+}
