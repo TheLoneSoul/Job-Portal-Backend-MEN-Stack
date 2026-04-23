@@ -38,3 +38,18 @@ exports.getJobsById = async(req, res, next)=> {
         next(error);
     }
 };
+
+exports.updateJobsById = async(req, res, next) => {
+    try {
+        const job = await Jobs.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true});
+        if(job.length === 0){
+            res.status(404).json({
+                success: false,
+                message: "Job not found"
+            });
+        }
+        res.status(200).json(job);
+    } catch (error) {
+        next(error);
+    }
+}
