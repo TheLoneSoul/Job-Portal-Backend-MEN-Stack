@@ -1,16 +1,12 @@
 const express = require('express');
 const databaseConnection = require('./databaseConnection.js');
-require('dotenv').config();
+const jobs = require('./routes/jobRoutes.js')
 const app = express();
+require('dotenv').config();
 databaseConnection();
 
 app.use(express.json());
-
-app.use('/api', (req, res) => {
-    res.send('API is working');
-});
-
+app.use('/api', jobs);
 app.listen(3000, () => {
-    console.log("Server is running");
-    
+    console.log("Server is running");  
 });
