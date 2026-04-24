@@ -6,7 +6,12 @@ exports.getAllJobs = async(req, res, next) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 3;
         const skip = (page - 1) * limit;
-        const job = await Jobs.find().skip(skip).limit(limit);
+
+        //Sorting Logic
+        const sortingOption = {latest: '-createdAt', oldest: 'createdAt', high: '-salary', low: 'salary'}
+        const sort = sortingOption[req.query.sort] || '-createdAt'
+        
+        const job = await Jobs.find().sort(sort).skip(skip).limit(limit);
         const totalJob = await Jobs.countDocuments();
         if(job.length === 0){
             res.status(404).json({
