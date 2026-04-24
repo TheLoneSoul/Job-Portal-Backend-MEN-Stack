@@ -8,11 +8,19 @@ exports.getAllJobs = async(req, res, next) => {
         const skip = (page - 1) * limit;
 
         //Sorting Logic
-        const sortingOption = {latest: '-createdAt', oldest: 'createdAt', high: '-salary', low: 'salary'}
-        const sort = sortingOption[req.query.sort] || '-createdAt'
+        const sortingOption = {latest: '-createdAt', oldest: 'createdAt', high: '-salary', low: 'salary'};
+        const sort = sortingOption[req.query.sort] || '-createdAt';
         
-        const job = await Jobs.find().sort(sort).skip(skip).limit(limit);
-        const totalJob = await Jobs.countDocuments();
+        //Search Logic
+        let search = {};
+        if(req.query.search){
+            search = {
+                $text : {$search: req.query.search}
+            };
+        };
+        
+        const job = await Jobs.find(search).sort(sort).skip(skip).limit(limit);
+        const totalJob = await Jobs.countDocuments(search);
         if(job.length === 0){
             res.status(404).json({
             success: false,
