@@ -1,15 +1,26 @@
-const Jobs = require('../models/Jobs')
+const Jobs = require('../models/Jobs.js')
 
 exports.getAllJobs = async(req, res, next) => {
     try {
-        const job = await Jobs.find();
+        //Pagination Logic
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 3;
+        const skip = (page - 1) * limit;
+        const job = await Jobs.find().skip(skip).limit(limit);
+        const totalJob = await Jobs.countDocuments();
         if(job.length === 0){
             res.status(404).json({
             success: false,
             message: "Job not found"
             })
         }
-        res.status(200).json(job);
+        res.status(200).json({
+            page,
+            limit,
+            skip,
+            totalJob,
+            job
+        });
     } catch (error) {
         next(error);
     }
