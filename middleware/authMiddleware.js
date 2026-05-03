@@ -26,7 +26,7 @@ exports.isAdmin = async(req, res, next) => {
         if(req.user && req.user.role === 'admin'){
             return next();
         }
-        res.status(401).json({success: false, message: "Forbidden: Requires admin"});
+        res.status(403).json({success: false, message: "Forbidden: Requires admin"});
     } catch (error) {
         next(error)
     }

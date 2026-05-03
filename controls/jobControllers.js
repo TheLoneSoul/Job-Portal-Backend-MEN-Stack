@@ -22,7 +22,7 @@ exports.getAllJobs = async(req, res, next) => {
         const job = await Jobs.find(search).sort(sort).skip(skip).limit(limit);
         const totalJob = await Jobs.countDocuments(search);
         if(job.length === 0){
-            res.status(404).json({
+            return res.status(404).json({
             success: false,
             message: "Job not found"
             })
@@ -51,8 +51,8 @@ exports.postJobs = async(req, res, next) => {
 exports.getJobsById = async(req, res, next)=> {
     try {
         const job = await Jobs.findById(req.params.id);
-        if( !job){
-            res.status(404).json({
+        if(!job){
+            return res.status(404).json({
                 success: false,
                 message: "Job not found"
             })
@@ -67,7 +67,7 @@ exports.updateJobsById = async(req, res, next) => {
     try {
         const job = await Jobs.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true});
         if(!job){
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: "Job not found"
             });
@@ -82,7 +82,7 @@ exports.deleteJobsById = async(req, res, next) => {
     try {
         const job = await Jobs.findByIdAndDelete(req.params.id);
         if(!job){
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: "Job not found"
             });
