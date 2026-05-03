@@ -1,12 +1,12 @@
 const express = require('express');
 const databaseConnection = require('./databaseConnection.js');
-const jobs = require('./routes/index.js')
+const route = require('./routes/index.js')
 const app = express();
 require('dotenv').config();
 databaseConnection();
 
 app.use(express.json());
-app.use('/api', jobs);
+app.use('/api', route);
 app.use((error, req, res, next) => {
     const statusCode = error.statusCode || 500
     res.status(statusCode).json({
