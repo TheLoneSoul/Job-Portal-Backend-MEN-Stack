@@ -20,3 +20,14 @@ exports.protection = async(req, res, next) => {
         next(error)
     }
 };
+
+exports.isAdmin = async(req, res, next) => {
+    try {
+        if(req.user && req.user.role === 'admin'){
+            return next();
+        }
+        res.status(401).json({success: false, message: "Forbidden: Requires admin"});
+    } catch (error) {
+        next(error)
+    }
+}
